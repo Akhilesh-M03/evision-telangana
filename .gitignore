@@ -216,3 +216,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Log files
+backend/logs/*.log
+backend/logs/**/*.log
