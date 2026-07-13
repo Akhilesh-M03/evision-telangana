@@ -6,6 +6,7 @@ description = "Backend API for EVision Telangana"
 requires-python = ">=3.14"
 dependencies = [
     "fastapi>=0.139.0",
+    "pandas>=3.0.3",
     "pydantic>=2.13.4",
     "pydantic-settings>=2.14.2",
     "python-dotenv>=1.2.2",
