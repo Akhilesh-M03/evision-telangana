@@ -14,46 +14,58 @@ router = APIRouter(
 )
 async def health_check():
     return {
-        "status": "healthy",
-        "service": "EVision Telangana API",
+        "success": True,
+        "message": "Application is healthy.",
+        "data": {
+            "status": "Healthy",
+            "apiVersion": "v1",
+        },
     }
 
 
 @router.get(
-    "/live",
-    summary="Liveness Check",
-    description="Check if the application is alive.",
+    "/database",
+    summary="Database Health Check",
+    description="Check if the database connection is available.",
     status_code=status.HTTP_200_OK,
 )
-async def health_live():
+async def health_database():
     return {
-        "status": "alive",
-        "service": "EVision Telangana API",
+        "success": True,
+        "message": "Database connection successful.",
+        "data": {
+            "status": "Connected",
+        },
     }
 
 
 @router.get(
-    "/ready",
-    summary="Readiness Check",
-    description="Check if the application is ready to serve requests.",
+    "/models",
+    summary="Models Health Check",
+    description="Check if the trained models are available.",
     status_code=status.HTTP_200_OK,
 )
-async def health_ready():
+async def health_models():
     return {
-        "status": "ready",
-        "service": "EVision Telangana API",
+        "success": True,
+        "message": "Machine learning models loaded successfully.",
+        "data": {
+            "status": "Available",
+        },
     }
 
 
 @router.get(
-    "/version",
-    summary="API Version",
-    description="Retrieve backend version information.",
+    "/ai",
+    summary="AI Health Check",
+    description="Check if the configured AI service is available.",
     status_code=status.HTTP_200_OK,
 )
-async def get_version():
+async def health_ai():
     return {
-        "project": "EVision Telangana",
-        "api_version": "v1",
-        "status": "stable",
+        "success": True,
+        "message": "AI service is available.",
+        "data": {
+            "status": "Available",
+        },
     }

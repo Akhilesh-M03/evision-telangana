@@ -1,50 +1,81 @@
-from fastapi import APIRouter,Query
+from fastapi import APIRouter, Query, status
 
-router=APIRouter(
+router = APIRouter(
     prefix="/districts",
     tags=["Districts"],
 )
 
-@router.get("/")
+@router.get("/", status_code=status.HTTP_200_OK)
 async def get_all_districts():
-    return{
-        "success":True,
-        "message": "district retrieved  succesfully ",
-        "data":[]
-    }
-
-@router.get("/{district_id}")
-async def get_all_district_id(district_id:int):
-    return{
-        "success":True,
-        "message":"District fecthed succesfully",
-        "data":[]
-    }
-@router.get("/search",
-            summary="search_districts",
-            description="search districts by name"
-            )
-async def search_districts(
-    name : str=Query(description="district name")
-):
-    return{
-        "sucess":True,
-        "message":"distict name found sucesfully",
-        "data":{
-            "search":name
-        }
-    }
-
-@router.get(
-    "/{district_id}/comparison",
-    summary="Compare district",
-    description="Retrieve comparison details for a district."
-)
-async def compare_district(district_id: int):
     return {
         "success": True,
-        "message": "Comparison retrieved successfully.",
+        "message": "Districts retrieved successfully.",
+        "data": [],
+        "metadata": {"count": 0},
+    }
+
+
+@router.get(
+    "/search",
+    summary="Search districts",
+    description="Search districts by name",
+    status_code=status.HTTP_200_OK,
+)
+async def search_districts(
+    q: str = Query(..., description="Search text")
+):
+    return {
+        "success": True,
+        "message": "Search completed successfully.",
+        "data": [],
+    }
+
+
+@router.get(
+    "/{district}/comparison",
+    summary="Compare districts",
+    description="Retrieve comparison details for a district.",
+    status_code=status.HTTP_200_OK,
+)
+async def compare_district(
+    district: str,
+    compareWith: str = Query(..., description="District to compare against"),
+):
+    return {
+        "success": True,
+        "message": "District comparison generated successfully.",
         "data": {
-            "district_id": district_id
+            "districtA": {
+                "name": district,
+                "priorityScore": None,
+                "predictedDemand": None,
+                "cluster": None,
+            },
+            "districtB": {
+                "name": compareWith,
+                "priorityScore": None,
+                "predictedDemand": None,
+                "cluster": None,
+            },
         }
+    }
+
+
+@router.get(
+    "/{district}",
+    summary="Get district by name",
+    description="Retrieve information for a single district.",
+    status_code=status.HTTP_200_OK,
+)
+async def get_district(district: str):
+    return {
+        "success": True,
+        "message": "District information retrieved successfully.",
+        "data": {
+            "district": district,
+            "cluster": None,
+            "chargingStations": None,
+            "predictedDemand": None,
+            "priorityScore": None,
+        },
     }

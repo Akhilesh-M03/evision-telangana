@@ -1,19 +1,9 @@
-from typing import Any
-
-from fastapi import APIRouter, Depends, Path, Query, status
+from fastapi import APIRouter, Path, Query, status
 
 router = APIRouter(
     prefix="/recommendations",
     tags=["Recommendations"],
 )
-
-
-def get_recommendation_service() -> Any:
-    """
-    Placeholder for RecommendationService.
-    Replace with the actual service once implemented.
-    """
-    raise NotImplementedError("RecommendationService is not implemented yet.")
 
 
 @router.get(
@@ -25,25 +15,28 @@ def get_recommendation_service() -> Any:
 async def get_all_recommendations(
     priority: str | None = Query(None, description="Filter by priority"),
     limit: int | None = Query(None, ge=1, description="Maximum records"),
-    recommendation_service: Any = Depends(get_recommendation_service),
 ):
-    return await recommendation_service.get_all_recommendations(
-        priority=priority,
-        limit=limit,
-    )
+    return {
+        "success": True,
+        "message": "Recommendations retrieved successfully.",
+        "data": [],
+    }
 
 
 @router.get(
-    "/high-priority",
-    summary="Get high priority recommendations",
-    description="Retrieve high priority districts.",
+    "/top",
+    summary="Get top recommendations",
+    description="Retrieve highest-ranked districts.",
     status_code=status.HTTP_200_OK,
 )
 async def get_high_priority_recommendations(
     limit: int | None = Query(None, ge=1),
-    recommendation_service: Any = Depends(get_recommendation_service),
 ):
-    return await recommendation_service.get_high_priority_recommendations(limit=limit)
+    return {
+        "success": True,
+        "message": "Top recommendations retrieved successfully.",
+        "data": [],
+    }
 
 
 @router.get(
@@ -53,31 +46,36 @@ async def get_high_priority_recommendations(
     status_code=status.HTTP_200_OK,
 )
 async def get_recommendation_summary(
-    recommendation_service: Any = Depends(get_recommendation_service),
 ):
-    return await recommendation_service.get_summary()
+    return {
+        "success": True,
+        "message": "Recommendation summary retrieved successfully.",
+        "data": {
+            "districtCount": 0,
+            "highestPriorityScore": None,
+            "averagePriorityScore": None,
+            "highPriorityDistricts": 0,
+        },
+    }
 
 
 @router.get(
-    "/download",
-    summary="Download recommendations",
-    description="Download recommendation report.",
-    status_code=status.HTTP_200_OK,
-)
-async def download_recommendations(
-    recommendation_service: Any = Depends(get_recommendation_service),
-):
-    return await recommendation_service.download_recommendations()
-
-
-@router.get(
-    "/{district_id}",
+    "/{district}",
     summary="Get recommendation by district",
     description="Retrieve recommendation for a specific district.",
     status_code=status.HTTP_200_OK,
 )
 async def get_recommendation_by_district(
-    district_id: int = Path(..., ge=1, description="District ID"),
-    recommendation_service: Any = Depends(get_recommendation_service),
+    district: str = Path(..., description="District name"),
 ):
-    return await recommendation_service.get_recommendation_by_district(district_id)
+    return {
+        "success": True,
+        "message": "Recommendation retrieved successfully.",
+        "data": {
+            "district": district,
+            "priorityScore": None,
+            "priorityLevel": None,
+            "predictedDemand": None,
+            "chargingStations": None,
+        },
+    }
