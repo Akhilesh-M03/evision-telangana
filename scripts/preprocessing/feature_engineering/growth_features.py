@@ -14,7 +14,7 @@ monthly_growth_rate  : Percentage change in ``units`` from the previous month:
 monthly_load_growth  : Percentage change in ``load`` from the previous month.
                        Same conventions as monthly_growth_rate.
 cumulative_units     : Running total of ``units`` for the district, up to
-                       and including month *t* (inclusive cumulative sum).
+                       and including month *t-1* (historical cumulative sum).
 cumulative_load      : Running total of ``load`` for the district, same logic.
 
 Implementation notes
@@ -24,8 +24,8 @@ Implementation notes
 - Infinite growth rates (caused by 0 → non-zero transitions) are replaced
   with NaN to prevent downstream model instability.
 - Negative growth rates are valid (e.g. consumption declined).
-- Cumulative sums are truly historical (including the current month) and
-  are therefore suitable as "total volume to date" features.
+- Cumulative sums are strictly historical (using shift(1).cumsum()) and
+  are therefore suitable as "total volume to date" features without target leakage.
 """
 
 import logging
@@ -134,8 +134,8 @@ def add_growth_features(df: pd.DataFrame) -> pd.DataFrame:
 
         group["monthly_growth_rate"] = _safe_pct_change(units)
         group["monthly_load_growth"] = _safe_pct_change(load)
-        group["cumulative_units"] = units.cumsum()
-        group["cumulative_load"] = load.cumsum()
+        group["cumulative_units"] = units.shift(1).cumsum()
+        group["cumulative_load"] = load.shift(1).cumsum()
 
         result.loc[group_idx, growth_cols] = group[growth_cols].values
 

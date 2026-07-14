@@ -478,8 +478,8 @@ FEATURE_ENTRIES: List[FeatureEntry] = [
         feature_name="cumulative_units",
         category="growth",
         description="Running total of electricity units consumed by the district from "
-                    "its first observation up to and including the current month.",
-        formula="cumsum(units) per district",
+                    "its first observation up to the month preceding the current month.",
+        formula="cumsum(units.shift(1)) per district",
         input_columns="district, reporting_month, units",
         output_type="float",
         used_by="ml, analytics",
@@ -488,8 +488,8 @@ FEATURE_ENTRIES: List[FeatureEntry] = [
         feature_name="cumulative_load",
         category="growth",
         description="Running total of connected load for the district from its first "
-                    "observation up to and including the current month.",
-        formula="cumsum(load) per district",
+                    "observation up to the month preceding the current month.",
+        formula="cumsum(load.shift(1)) per district",
         input_columns="district, reporting_month, load",
         output_type="float",
         used_by="ml, analytics",

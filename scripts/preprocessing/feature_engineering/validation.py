@@ -53,6 +53,9 @@ _EXPECTED_NAN_COLS = {
     "services_per_station",
     # Utilization NaN when services == 0
     "average_units_per_billed_service",
+    # Cumulative NaN for the first row per district
+    "cumulative_units",
+    "cumulative_load",
 }
 
 

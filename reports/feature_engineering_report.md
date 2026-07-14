@@ -1,6 +1,6 @@
 # EVision Telangana – Feature Engineering Report
 
-_Generated: 2026-07-14 02:31:38 UTC_
+_Generated: 2026-07-14 03:22:44 UTC_
 
 ---
 
@@ -64,6 +64,8 @@ _No warnings._
 | `rolling_average_6m` | 32 |
 | `rolling_average_12m` | 32 |
 | `monthly_load_growth` | 32 |
+| `cumulative_units` | 32 |
+| `cumulative_load` | 32 |
 | `average_units_per_billed_service` | 12 |
 
 ---
@@ -115,8 +117,8 @@ _No warnings._
 | `rolling_min_6m` | `float64` | 186 |
 | `monthly_growth_rate` | `float64` | 98 |
 | `monthly_load_growth` | `float64` | 32 |
-| `cumulative_units` | `float64` | 0 |
-| `cumulative_load` | `float64` | 0 |
+| `cumulative_units` | `float64` | 32 |
+| `cumulative_load` | `float64` | 32 |
 
 ---
 
