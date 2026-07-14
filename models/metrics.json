@@ -1,0 +1,22 @@
+{
+    "RandomForest": {
+        "rmse": 108065.98268169262,
+        "mae": 24006.99172839506,
+        "r2": 0.7261595410898622,
+        "best_params": {
+            "max_depth": null,
+            "min_samples_split": 2,
+            "n_estimators": 100
+        }
+    },
+    "XGBoost": {
+        "rmse": 103990.5501899808,
+        "mae": 22939.116634918337,
+        "r2": 0.7464244641829123,
+        "best_params": {
+            "learning_rate": 0.2,
+            "max_depth": 9,
+            "n_estimators": 200
+        }
+    }
+}
