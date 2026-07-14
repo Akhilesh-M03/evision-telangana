@@ -2,12 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Zap, 
-  ArrowRight, 
+  ArrowRight,
   TrendingUp, 
   Target, 
   Bot, 
   MapPin, 
-  LineChart as ChartIcon, 
   Layers, 
   MessageSquare, 
   ArrowLeft, 
@@ -21,12 +20,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
-  Moon,
   AlertTriangle,
-  ZoomIn,
-  ZoomOut,
-  Maximize2,
-  ArrowUpRight,
   Sparkles,
   Calendar,
   ChevronDown,
@@ -34,11 +28,9 @@ import {
   Check,
   Clock
 } from 'lucide-react';
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, useMap, GeoJSON } from 'react-leaflet';
 import { 
   ResponsiveContainer, 
-  LineChart, 
-  Line, 
   XAxis, 
   YAxis, 
   CartesianGrid, 
@@ -54,8 +46,7 @@ import {
 } from 'recharts';
 
 import 'leaflet/dist/leaflet.css';
-import figCleanBoth from './assets/fig_clean_both.png';
-import evChargingVector from './assets/ev_charging_station_vector.png';
+import { EVisionTelanganaLanding } from './components/landing';
 
 // Realistic mock data for Telangana districts
 const districtData = {
@@ -754,24 +745,6 @@ function App() {
     }
   };
 
-  // Translate original landing page card clicks to new tabs
-  const handleCardClick = (tab) => {
-    if (tab === 'forecasting') setDbTab('predictions');
-    else if (tab === 'recommendations') setDbTab('explorer');
-    else if (tab === 'chatbot') setDbTab('assistant');
-    else setDbTab(tab);
-    setView('dashboard');
-  };
-
-  // Generate chart data for predictions
-  const getChartData = () => {
-    return [
-      { year: '2026', Demand: activeData.demand2026 },
-      { year: '2028', Demand: activeData.demand2028 },
-      { year: '2030', Demand: activeData.demand2030 },
-    ];
-  };
-
   // Generate monthly demand trend data from Jan '25 to Nov '26
   const getForecastTrendData = () => {
     const baseVal = activeData.demand2026 / 35;
@@ -804,18 +777,6 @@ function App() {
       actual: d.actual ? parseFloat((d.actual * factor * 10).toFixed(1)) : null,
       forecast: d.forecast ? parseFloat((d.forecast * factor * 10).toFixed(1)) : null,
     }));
-  };
-
-  // Generate Analytics tab comparison data
-  const getTopDistrictsData = () => {
-    return districtsList
-      .sort((a, b) => b.demand2030 - a.demand2030)
-      .slice(0, 5)
-      .map(d => ({
-        name: d.name,
-        Demand: d.demand2030,
-        EVs: d.evCount
-      }));
   };
 
   // Chat message submission
@@ -898,90 +859,8 @@ function App() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="landing-container"
         >
-          {/* Header */}
-          <header className="landing-header">
-            <div className="logo-container">
-              <div className="logo-icon">
-                <Zap />
-              </div>
-              <div className="logo-text">
-                <span className="logo-title">EVision Telangana</span>
-                <span className="logo-subtitle">AI-Powered EV Infrastructure Planner</span>
-              </div>
-            </div>
-          </header>
-
-          {/* Hero Content */}
-          <main className="landing-hero">
-            <div className="hero-left">
-              <h1 className="hero-title">
-                Smarter Decisions.
-                <span>Greener Tomorrow.</span>
-              </h1>
-              <p className="hero-description">
-                AI-driven insights to optimize EV charging station placement, 
-                improve coverage, and build a sustainable future for Telangana.
-              </p>
-              <button 
-                onClick={() => setView('dashboard')}
-                className="explore-btn"
-              >
-                Explore Dashboard <ArrowRight />
-              </button>
-            </div>
-
-            <div className="hero-right">
-              {/* Card 1: AI Demand Forecasting */}
-              <div 
-                className="info-card"
-                onClick={() => handleCardClick('forecasting')}
-              >
-                <div className="card-icon-container">
-                  <TrendingUp />
-                </div>
-                <div className="card-content">
-                  <h3 className="card-title">AI Demand Forecasting</h3>
-                  <p className="card-desc">
-                    Predict future EV charging demand across Telangana districts using machine learning models.
-                  </p>
-                </div>
-              </div>
-
-              {/* Card 2: Smart Recommendations */}
-              <div 
-                className="info-card"
-                onClick={() => handleCardClick('recommendations')}
-              >
-                <div className="card-icon-container">
-                  <Target />
-                </div>
-                <div className="card-content">
-                  <h3 className="card-title">Smart Recommendations</h3>
-                  <p className="card-desc">
-                    Generate District Priority Scores to identify the best locations for new EV charging stations.
-                  </p>
-                </div>
-              </div>
-
-              {/* Card 3: AI Decision Assistant */}
-              <div 
-                className="info-card"
-                onClick={() => handleCardClick('chatbot')}
-              >
-                <div className="card-icon-container">
-                  <Bot />
-                </div>
-                <div className="card-content">
-                  <h3 className="card-title">AI Decision Assistant</h3>
-                  <p className="card-desc">
-                    Ask questions in natural language and receive explainable insights into predictions and recommendations.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </main>
+          <EVisionTelanganaLanding onExploreDashboard={() => setView('dashboard')} />
         </motion.div>
       ) : (
         <motion.div
@@ -1385,19 +1264,6 @@ function App() {
 
                 const riskScoreVal = Math.round(activeData.priorityScore * 7.5 + 6);
                 const riskLevelVal = riskScoreVal >= 75 ? "High Risk" : riskScoreVal >= 50 ? "Medium Risk" : "Low Risk";
-
-                const lat = activeData.coordinates[0];
-                const lng = activeData.coordinates[1];
-                const mockSites = [
-                  { lat: lat + 0.012, lng: lng - 0.015, type: "existing", label: "Metro Parking Charger" },
-                  { lat: lat - 0.008, lng: lng + 0.018, type: "existing", label: "Public Mall AC Hub" },
-                  { lat: lat + 0.018, lng: lng + 0.008, type: "proposed", label: "Hitec City Fast DC" },
-                  { lat: lat - 0.015, lng: lng - 0.01, type: "proposed", label: "Tourist Park Charging" },
-                  { lat: lat + 0.004, lng: lng + 0.004, type: "high_power", label: "Highway DC Superfast" },
-                  { lat: lat - 0.004, lng: lng - 0.018, type: "existing", label: "Commercial Hub AC" },
-                  { lat: lat + 0.022, lng: lng - 0.022, type: "proposed", label: "Bypass Charging Station" },
-                  { lat: lat - 0.022, lng: lng + 0.022, type: "high_power", label: "Ring Road Station" },
-                ];
 
                 return (
                   <div className="space-y-4 flex flex-col h-[calc(100vh-105px)] min-h-0">
