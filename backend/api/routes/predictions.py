@@ -1,75 +1,54 @@
-from fastapi import APIRouter, Query, status
+from fastapi import APIRouter, HTTPException, status
 
 router = APIRouter(
     prefix="/predictions",
     tags=["Predictions"],
 )
 
-
 @router.get(
     "/",
     summary="Get all predictions",
-    description="Retrieve predicted EV charging demand for all districts.",
-    status_code=status.HTTP_200_OK,
+    description="Retrieve predicted EV charging demand for all districts. TODO: Implement prediction endpoints according to the API Alignment Report.",
+    status_code=status.HTTP_501_NOT_IMPLEMENTED,
 )
-async def get_all_predictions(year: int | None = Query(None, description="Forecast year")):
-    response = {
-        "success": True,
-        "message": "Predictions retrieved successfully.",
-        "data": [],
-    }
-    if year is not None:
-        response["metadata"] = {"year": year}
-    return response
-
+async def get_all_predictions():
+    raise HTTPException(
+        status_code=status.HTTP_501_NOT_IMPLEMENTED,
+        detail="Prediction endpoints not implemented. See API Alignment Report."
+    )
 
 @router.get(
     "/{district}",
     summary="Get prediction by district",
-    description="Retrieve prediction for a specific district.",
-    status_code=status.HTTP_200_OK,
+    description="Retrieve prediction for a specific district. TODO: Implement prediction endpoints according to the API Alignment Report.",
+    status_code=status.HTTP_501_NOT_IMPLEMENTED,
 )
 async def get_prediction_by_district(district: str):
-    return {
-        "success": True,
-        "message": "Prediction retrieved successfully.",
-        "data": {
-            "district": district,
-            "predictedDemand": None,
-        }
-    }
-
+    raise HTTPException(
+        status_code=status.HTTP_501_NOT_IMPLEMENTED,
+        detail="Prediction endpoints not implemented. See API Alignment Report."
+    )
 
 @router.get(
     "/top",
     summary="Top priority districts",
-    description="Retrieve top districts based on predicted demand.",
-    status_code=status.HTTP_200_OK,
+    description="Retrieve top districts based on predicted demand. TODO: Implement prediction endpoints according to the API Alignment Report.",
+    status_code=status.HTTP_501_NOT_IMPLEMENTED,
 )
-async def get_top_predictions(
-    limit: int = Query(10, ge=1, le=50)
-):
-    return {
-        "success": True,
-        "message": "Top predictions retrieved successfully.",
-        "data": [],
-    }
-
+async def get_top_predictions():
+    raise HTTPException(
+        status_code=status.HTTP_501_NOT_IMPLEMENTED,
+        detail="Prediction endpoints not implemented. See API Alignment Report."
+    )
 
 @router.get(
     "/summary",
     summary="Prediction summary",
-    description="Retrieve prediction summary statistics.",
-    status_code=status.HTTP_200_OK,
+    description="Retrieve prediction summary statistics. TODO: Implement prediction endpoints according to the API Alignment Report.",
+    status_code=status.HTTP_501_NOT_IMPLEMENTED,
 )
 async def get_prediction_summary():
-    return {
-        "success": True,
-        "message": "Prediction summary retrieved successfully.",
-        "data": {
-            "highestPrediction": None,
-            "lowestPrediction": None,
-            "averagePrediction": None,
-            "districtCount": 0,
-        }
-    }
+    raise HTTPException(
+        status_code=status.HTTP_501_NOT_IMPLEMENTED,
+        detail="Prediction endpoints not implemented. See API Alignment Report."
+    )
